@@ -23,33 +23,49 @@ class SimpleEnvironment(object):
     def GetSuccessors(self, node_id):
 
         successors = []
-
-        # TODO: Here you will implement a function that looks
-        #  up the configuration associated with the particular node_id
-        #  and return a list of node_ids that represent the neighboring
-        #  nodes
-        
+	config = self.discrete_env.NodeIdToGridCoord(node_id)
+	for i in range(0,self.discrete_env.dimension):
+		config[i] += 1
+		if config[i] < self.discrete_env.num_cells[i]:
+			successors.append(self.discrete_env.GridCoordToNodeId(config))
+		config[i] -= 2
+		if config[i] >= 0:
+			successors.append(self.discrete_env.GridCoordToNodeId(config))
+		config[i] += 1
         return successors
 
     def ComputeDistance(self, start_id, end_id):
-
-        dist = 0
-
-        # TODO: Here you will implement a function that 
-        # computes the distance between the configurations given
-        # by the two node ids
-
-        return dist
+	epsilon = 0.1
+	start = self.discrete_env.NodeIdToGridCoord(start_id) 
+	end = self.discrete_env.NodeIdToGridCoord(end_id) 
+	curr = list(start)
+	with self.robot:
+		tform = self.robot.GetTransform()
+		for i in range(0,self.discrete_env.dimension):
+			if start[i] == end[i] : continue
+			goalCoords = list(curr)
+			goalCoords[i] = end[i]
+			scfg = self.discrete_env.GridCoordToConfiguration(curr)
+			ecfg = self.discrete_env.GridCoordToConfiguration(goalCoords)
+			vec = numpy.array(ecfg) - numpy.array(scfg)
+			veclen = numpy.linalg.norm(vec)
+			vec = vec/veclen
+			travel = 0
+			while travel < veclen:
+				val = scfg + vec*travel
+				tform[0:2,3] = val 
+				self.robot.SetTransform(tform)
+				if self.robot.GetEnv().CheckCollision(self.robot) == True:
+					return float("inf") 
+				travel += epsilon
+	return self.ComputeHeuristicCost(start_id, end_id)	
 
     def ComputeHeuristicCost(self, start_id, goal_id):
         
         cost = 0
-
-        # TODO: Here you will implement a function that 
-        # computes the heuristic cost between the configurations
-        # given by the two node ids
-
-        return cost
+	start = numpy.array(self.discrete_env.NodeIdToGridCoord(start_id))
+	end = numpy.array(self.discrete_env.NodeIdToGridCoord(goal_id)) 	
+        return numpy.sum(numpy.absolute(end-start))*self.discrete_env.resolution
 
     def InitializePlot(self, goal_config):
         self.fig = pl.figure()
