@@ -40,7 +40,7 @@ class DiscreteEnvironment(object):
         config = [0] * self.dimension
         coord = self.NodeIdToGridCoord(nid)
         config = self.GridCoordToConfiguration(coord)
-        return config
+        return numpy.array(config)
         
     def ConfigurationToGridCoord(self, config):
         
@@ -52,7 +52,7 @@ class DiscreteEnvironment(object):
         # for i  in range (self.dimension):
         coord = numpy.floor((config-self.lower_limits)/self.resolution)
 
-        return coord
+        return numpy.array(coord)
 
     def GridCoordToConfiguration(self, coord):
         
@@ -62,7 +62,7 @@ class DiscreteEnvironment(object):
         #
         config = [0] * self.dimension
         config = (coord+0.5)*self.resolution + self.lower_limits
-        return config
+        return numpy.array(config)
 
     def GridCoordToNodeId(self,coord):
         
@@ -87,7 +87,9 @@ class DiscreteEnvironment(object):
         for i in range(self.dimension-1,-1,-1):
             coord[i] = numpy.floor(node_id/numpy.power(self.num_cells[i],i))
             node_id =  numpy.mod(node_id,numpy.power(self.num_cells[i],i))
-        return coord
-        
-        
-        
+
+
+        return numpy.array(coord)
+
+        import IPython
+        IPython.embed()
