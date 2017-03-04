@@ -90,6 +90,3 @@ class DiscreteEnvironment(object):
 
 
         return numpy.array(coord)
-
-        import IPython
-        IPython.embed()
