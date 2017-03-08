@@ -45,8 +45,12 @@ class HerbEnvironment(object):
 		if config[i] >= 0:
 			successors.append(self.discrete_env.GridCoordToNodeId(config))
 		config[i] += 1
-	successors = [x for x in successors if self.ComputeDistance(node_id,x) != float("inf")]
         return successors
+
+    def GetValidSuccessors(self, node_id):
+	successors = self.GetSuccessors(self, node_id)
+	successors = [x for x in successors if self.ComputeDistance(node_id,x) != float("inf")]
+	return successors
 
     def ComputeDistance(self, start_id, end_id):
 

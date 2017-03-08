@@ -32,7 +32,7 @@ class DepthFirstPlanner(object):
                 plan = self.find_path(path,start_node,goal_node)
                 return plan
             else:
-                nodes_nearby = self.planning_env.GetSuccessors(x)
+                nodes_nearby = self.planning_env.GetValidSuccessors(x)
                 for node in nodes_nearby:
                     if node in self.nodes and self.nodes[node]==True:
                         continue
