@@ -79,7 +79,7 @@ class HerbEnvironment(object):
 	end = numpy.array(self.discrete_env.NodeIdToConfiguration(goal_id)) 	
 	return numpy.linalg.norm(end-start)
 	
-    def SetGoalParameters(self, goal_config, p = 0.1):
+    def SetGoalParameters(self, goal_config, p = 0.05):
 		self.goal_config = goal_config
 		self.p = p
 		
@@ -108,7 +108,7 @@ class HerbEnvironment(object):
 					self.robot.SetActiveDOFValues(robot_pos)
 					if (self.robot.GetEnv().CheckCollision(self.robot) or self.robot.CheckSelfCollision()) == False:
 						COLLISION = False
-		return numpy.array(config)
+		return self.discrete_env.NodeIdToConfiguration( self.discrete_env.ConfigurationToNodeId(config))
 
 
 	

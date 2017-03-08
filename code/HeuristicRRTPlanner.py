@@ -7,7 +7,7 @@ class HeuristicRRTPlanner(object):
     def __init__(self, planning_env, visualize):
         self.planning_env = planning_env
         self.visualize = visualize
-	self.probfloor = 1
+	self.probfloor = .1
 	self.kvertices = 1
         
 
@@ -26,25 +26,22 @@ class HeuristicRRTPlanner(object):
 	
 	# max edge length + a lot of code clean up
         maxDist = 100
+	it = 0
         while True:
             sample = self.planning_env.GenerateRandomConfiguration()
             #vertices = ftree.GetNearestKVertices(sample, self.kvertices)
 	    f_vid, vtx = ftree.GetNearestVertex(sample)
-	    found = False
+	    it+=1
+	    print it
 	   # for (f_vid, vtx) in vertices: 
 	    quality = 1 - (heuristicCost[f_vid] - optcost)/(worstcost-optcost)
 	    quality = min(quality, self.probfloor)
 
-	#    r = random.random()
+	    r = random.random()
 	#    print quality, r
-	    #if quality > r: 
-	#	found = True
-	#	break
-	#    if not found : continue
+	    if quality < r: continue 
 	    
 	    f_best = self.ExtendFromTree(vtx,sample,maxDist, epsilon)
-	    if(numpy.allclose(goal_config,sample)):
-		print f_best, ftree.GetNearestKVertices(sample,5)
 	   
 	    if f_best is not None:
                 new_id = self.AddNode(ftree, f_vid, f_best)
@@ -52,9 +49,7 @@ class HeuristicRRTPlanner(object):
 		heuristicCost[new_id] = costToCome[new_id] + self.planning_env.ComputeDistance(f_best,goal_config)
 		worstcost = max(heuristicCost[new_id], worstcost)
 		dist = self.planning_env.ComputeDistance(f_best, goal_config)
-		if(numpy.allclose(goal_config,sample)):
-			print dist
-		if(self.planning_env.ComputeDistance(f_best, goal_config)<epsilon):
+		if(dist<epsilon):
 		    return self.GeneratePlan(ftree, new_id)
 
     def ExtendFromTree(self, vtx, sample, maxDist,epsilon):
