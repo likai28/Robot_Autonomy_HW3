@@ -21,7 +21,7 @@ def main(robot, planning_env, planner):
         goal_config = numpy.array([ 4.6, -1.76, 0.00, 1.96, -1.15, 0.87, -1.43] )
     else:
         goal_config = numpy.array([3.0, 0.0])
-
+    planning_env.SetGoalParameters(goal_config)
     plan = planner.Plan(start_config, goal_config)
     traj = robot.ConvertPlanToTrajectory(plan)
 
