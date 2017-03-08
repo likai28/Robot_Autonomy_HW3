@@ -15,8 +15,8 @@ class AStarPlanner(object):
         plan = []
         path = dict()
         
-        if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
-            self.planning_env.InitializePlot(goal_config)
+        #if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
+        #    self.planning_env.InitializePlot(goal_config)
         # TODO: Here you will implement the AStar planner
         #  The return comingFrom should be a numpy array
         #  of dimension k x n where k is the number of waypoints
@@ -73,8 +73,8 @@ class AStarPlanner(object):
 
                 #Calculate current g_cost which is the distance traveled from start to y, thus, g(y)=g(x)+dis(x,y)
                 tentative_g_cost_y = self.nodes[x_id] + self.planning_env.ComputeDistance(x_id, y_id)
-                if self.visualize:
-                    self.planning_env.PlotEdge(self.planning_env.discrete_env.NodeIdToConfiguration(x_id), self.planning_env.discrete_env.NodeIdToConfiguration(y_id))
+                #if self.visualize:
+                #    self.planning_env.PlotEdge(self.planning_env.discrete_env.NodeIdToConfiguration(x_id), self.planning_env.discrete_env.NodeIdToConfiguration(y_id))
                 
                 if self.nodes.has_key(y_id) and tentative_g_cost_y>=self.nodes[y_id]:
                     continue

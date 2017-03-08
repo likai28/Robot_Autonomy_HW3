@@ -22,7 +22,15 @@ def main(robot, planning_env, planner):
     else:
         goal_config = numpy.array([3.0, 0.0])
 
-    plan = planner.Plan(start_config, goal_config)
+    plan,total_time,path_length,nodes_num = planner.Plan(start_config, goal_config)
+    print "total plan time = "
+    print total_time
+    print "path length = "
+    print path_length
+    print "nodes number = "
+    print nodes_num
+    print " "
+
     traj = robot.ConvertPlanToTrajectory(plan)
 
     raw_input('Press any key to execute trajectory')
