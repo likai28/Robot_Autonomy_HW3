@@ -64,6 +64,13 @@ class SimpleEnvironment(object):
 	start = numpy.array(self.discrete_env.NodeIdToConfiguration(start_id))
 	end = numpy.array(self.discrete_env.NodeIdToConfiguration(goal_id)) 	
 	return numpy.linalg.norm(end-start)
+
+    def ComputeManhattan(self, start_id, goal_id):
+      start = numpy.array(self.discrete_env.NodeIdToGridCoord(start_id))
+      end = numpy.array(self.discrete_env.NodeIdToGridCoord(goal_id))
+      return abs(start[0]-end[0])+abs(start[1]-end[1])
+
+
     def InitializePlot(self, goal_config):
         self.fig = pl.figure()
         pl.xlim([self.lower_limits[0], self.upper_limits[0]])

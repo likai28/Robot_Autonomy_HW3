@@ -23,7 +23,7 @@ class AStarPlanner(object):
         #  and n is the dimension of the robots configuration space
 
         # Create the closed set and the open set which contain the node ID
-        closedSet = []
+        closedSet = set()
         # openSet = PriorityQueue([])
         openSet = []
 
@@ -59,7 +59,7 @@ class AStarPlanner(object):
                 return plan
             
             # Add this to the close set
-            closedSet.append(x_id)
+            closedSet.add(x_id)
 
             # Create the list of the nearby nodes
             xNearby = self.planning_env.GetSuccessors(x_id)
@@ -72,9 +72,9 @@ class AStarPlanner(object):
                     continue
 
                 #Calculate current g_cost which is the distance traveled from start to y, thus, g(y)=g(x)+dis(x,y)
-                tentative_g_cost_y = self.nodes[x_id] + self.planning_env.ComputeHeuristicCost(x_id, y_id)
-
-                self.planning_env.PlotEdge(self.planning_env.discrete_env.NodeIdToConfiguration(x_id), self.planning_env.discrete_env.NodeIdToConfiguration(y_id))
+                tentative_g_cost_y = self.nodes[x_id] + self.planning_env.ComputeDistance(x_id, y_id)
+                if self.visualize:
+                    self.planning_env.PlotEdge(self.planning_env.discrete_env.NodeIdToConfiguration(x_id), self.planning_env.discrete_env.NodeIdToConfiguration(y_id))
                 
                 if self.nodes.has_key(y_id) and tentative_g_cost_y>=self.nodes[y_id]:
                     continue
@@ -85,7 +85,7 @@ class AStarPlanner(object):
                 # print "y_id = " , y_id ,"f =",f, ", g =" , self.nodes[y_id], ", h =", f-self.nodes[y_id]
 
                 # openSet.put((f,h,y_id))
-                heapq.heappush(openSet,[f,h,y_id])
+                heapq.heappush(openSet,(f,h,y_id))
                 path[y_id]=x_id
                 # time.sleep(5)
                 
