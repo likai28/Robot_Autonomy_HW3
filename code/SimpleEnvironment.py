@@ -41,7 +41,7 @@ class SimpleEnvironment(object):
 	return successors
 
     def ComputeDistanceBetweenIds(self, start_id, end_id):
-	epsilon = 0.1
+	epsilon = 0.01
 	start = self.discrete_env.NodeIdToConfiguration(start_id) 
 	end = self.discrete_env.NodeIdToConfiguration(end_id) 
 	with self.robot:
@@ -63,7 +63,7 @@ class SimpleEnvironment(object):
 	start = numpy.array(self.discrete_env.NodeIdToConfiguration(start_id))
 	end = numpy.array(self.discrete_env.NodeIdToConfiguration(goal_id)) 	
 	return numpy.linalg.norm(end-start)
-
+    
     def InitializePlot(self, goal_config):
         self.fig = pl.figure()
         pl.xlim([self.lower_limits[0], self.upper_limits[0]])
