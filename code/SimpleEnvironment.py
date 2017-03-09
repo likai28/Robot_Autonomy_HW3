@@ -40,7 +40,7 @@ class SimpleEnvironment(object):
 	return successors
 
     def ComputeDistance(self, start_id, end_id):
-	epsilon = 0.1
+	epsilon = 0.01
 	start = self.discrete_env.NodeIdToConfiguration(start_id) 
 	end = self.discrete_env.NodeIdToConfiguration(end_id) 
 	with self.robot:
