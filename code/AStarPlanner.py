@@ -15,8 +15,8 @@ class AStarPlanner(object):
         plan = []
         path = dict()
         
-        #if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
-        #    self.planning_env.InitializePlot(goal_config)
+        if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
+            self.planning_env.InitializePlot(goal_config)
         # TODO: Here you will implement the AStar planner
         #  The return comingFrom should be a numpy array
         #  of dimension k x n where k is the number of waypoints
@@ -41,6 +41,7 @@ class AStarPlanner(object):
         heapq.heappush(openSet,(f_cost,h_cost,start_id))
         
 
+	i = 0
 
         while(openSet):
 
@@ -60,28 +61,30 @@ class AStarPlanner(object):
             
             # Add this to the close set
             closedSet.add(x_id)
-
+	    i+=1
+	    print i
             # Create the list of the nearby nodes
             xNearby = self.planning_env.GetSuccessors(x_id)
             # print "Sccessor =",xNearby
             # Loop through all the nearby node and determine their f,g,h
             for y_id in xNearby:
-
                 # See if y is already searched
                 if y_id in closedSet:
                     continue
 
                 #Calculate current g_cost which is the distance traveled from start to y, thus, g(y)=g(x)+dis(x,y)
-                tentative_g_cost_y = self.nodes[x_id] + self.planning_env.ComputeDistance(x_id, y_id)
-                #if self.visualize:
-                #    self.planning_env.PlotEdge(self.planning_env.discrete_env.NodeIdToConfiguration(x_id), self.planning_env.discrete_env.NodeIdToConfiguration(y_id))
+                tentative_g_cost_y = self.nodes[x_id] + self.planning_env.ComputeDistanceBetweenIds(x_id, y_id)
+		if(tentative_g_cost_y == float('inf')):
+		    continue
+                if self.visualize:
+                    self.planning_env.PlotEdge(self.planning_env.discrete_env.NodeIdToConfiguration(x_id), self.planning_env.discrete_env.NodeIdToConfiguration(y_id))
                 
                 if self.nodes.has_key(y_id) and tentative_g_cost_y>=self.nodes[y_id]:
                     continue
 
                 self.nodes[y_id]=tentative_g_cost_y
                 h = self.planning_env.ComputeHeuristicCost(y_id, goal_id)
-                f = self.nodes[y_id] + 2*h
+                f = self.nodes[y_id] + h
                 # print "y_id = " , y_id ,"f =",f, ", g =" , self.nodes[y_id], ", h =", f-self.nodes[y_id]
 
                 # openSet.put((f,h,y_id))

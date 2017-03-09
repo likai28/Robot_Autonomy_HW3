@@ -19,9 +19,11 @@ def main(robot, planning_env, planner):
     start_config = numpy.array(robot.GetCurrentConfiguration())
     if robot.name == 'herb':
         goal_config = numpy.array([ 4.6, -1.76, 0.00, 1.96, -1.15, 0.87, -1.43] )
+        #goal_config = numpy.array([ 3.68, -1.90,  0.00,  2.20,  0.00,  0.00,  0.00 ])
     else:
         goal_config = numpy.array([3.0, 0.0])
 
+    planning_env.SetGoalParameters(goal_config)
     start_time = time.time()
     plan,nodes_num = planner.Plan(start_config, goal_config)
     total_time = time.time() - start_time;
@@ -33,7 +35,6 @@ def main(robot, planning_env, planner):
     print "nodes number = "
     print nodes_num
     print " "
-
     traj = robot.ConvertPlanToTrajectory(plan)
 
     raw_input('Press any key to execute trajectory')

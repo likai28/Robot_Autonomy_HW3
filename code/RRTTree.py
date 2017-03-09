@@ -19,9 +19,16 @@ class RRTTree(object):
             dists.append(self.planning_env.ComputeDistance(config, v))
 
         vid, vdist = min(enumerate(dists), key=operator.itemgetter(1))
-
+	
         return vid, self.vertices[vid]
-            
+
+    def GetNearestKVertices(self, config, k):
+        
+        dists = []
+        for v in self.vertices:
+            dists.append(self.planning_env.ComputeDistance(config, v))
+	dists = sorted(enumerate(dists), key=operator.itemgetter(1))
+	return [(vid,self.vertices[vid]) for (vid, dist) in dists[0:k]] 
 
     def AddVertex(self, config):
         vid = len(self.vertices)
