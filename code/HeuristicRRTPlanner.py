@@ -32,7 +32,6 @@ class HeuristicRRTPlanner(object):
             #vertices = ftree.GetNearestKVertices(sample, self.kvertices)
 	    f_vid, vtx = ftree.GetNearestVertex(sample)
 	    it+=1
-	    print it
 	   # for (f_vid, vtx) in vertices: 
 	    quality = 1 - (heuristicCost[f_vid] - optcost)/(worstcost-optcost)
 	    quality = min(quality, self.probfloor)
@@ -53,7 +52,7 @@ class HeuristicRRTPlanner(object):
 			dist = self.planning_env.ComputeDistance(f_best, r_best)	
 			if(dist<epsilon):
 			    g_id = self.AddNode(ftree, new_id, goal_config)
-			    return self.GeneratePlan(ftree, g_id)
+			    return (self.GeneratePlan(ftree, g_id), it)
 
     def ExtendFromTree(self, vtx, sample, maxDist,epsilon):
         vtx_sample_dist = self.planning_env.ComputeDistance(sample, vtx)
