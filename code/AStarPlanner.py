@@ -41,7 +41,6 @@ class AStarPlanner(object):
         heapq.heappush(openSet,(f_cost,h_cost,start_id))
         
 
-	i = 0
 
         while(openSet):
 
@@ -57,12 +56,10 @@ class AStarPlanner(object):
             # Return the comingFrom if the goal is reached
             if x_id == goal_id:
                 plan = self.find_path(path,start_id,goal_id)
-                return plan
+                return (plan, len(self.nodes))
             
             # Add this to the close set
             closedSet.add(x_id)
-	    i+=1
-	    print i
             # Create the list of the nearby nodes
             xNearby = self.planning_env.GetSuccessors(x_id)
             # print "Sccessor =",xNearby
@@ -84,7 +81,7 @@ class AStarPlanner(object):
 
                 self.nodes[y_id]=tentative_g_cost_y
                 h = self.planning_env.ComputeHeuristicCost(y_id, goal_id)
-                f = self.nodes[y_id] + h
+                f = self.nodes[y_id] + 2*h
                 # print "y_id = " , y_id ,"f =",f, ", g =" , self.nodes[y_id], ", h =", f-self.nodes[y_id]
 
                 # openSet.put((f,h,y_id))

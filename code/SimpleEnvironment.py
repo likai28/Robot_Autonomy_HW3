@@ -22,6 +22,7 @@ class SimpleEnvironment(object):
         table.SetTransform(table_pose)
 	self.goal_config = None
 	self.p = 0
+
     def GetSuccessors(self, node_id):
         successors = []
 	config = self.discrete_env.NodeIdToGridCoord(node_id)

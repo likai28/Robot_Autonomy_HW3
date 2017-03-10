@@ -11,12 +11,14 @@ class BreadthFirstPlanner(object):
         nodes_num = 0
 
         plan = []
+        if self.visualize and hasattr(self.planning_env, 'InitializePlot'):
+            self.planning_env.InitializePlot(goal_config)
 
         # TODO: Here you will implement the breadth first planner
         #  The return path should be a numpy array
         #  of dimension k x n where k is the number of waypoints
         #  and n is the dimension of the robots configuration space
-
+	
         #Build a dict to record vaild path
         path = dict()
         #Get the start and end node
@@ -47,6 +49,7 @@ class BreadthFirstPlanner(object):
                         queue.append(node)
                         #Add the valid edge into path
                         path[node]= x
+			if self.visualize: self.planning_env.PlotEdge(self.planning_env.discrete_env.NodeIdToConfiguration(x), self.planning_env.discrete_env.NodeIdToConfiguration(node))
                         #If this node reach goal_node, get the whole plan
                         if node == goal_node:
                             plan = self.find_path(path,start_node,goal_node)
