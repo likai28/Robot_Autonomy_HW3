@@ -24,17 +24,22 @@ def main(robot, planning_env, planner):
         goal_config = numpy.array([3.0, 0.0])
 
     planning_env.SetGoalParameters(goal_config)
-    start_time = time.time()
-    plan,nodes_num = planner.Plan(start_config, goal_config)
-    total_time = time.time() - start_time;
-    path_length = reduce(lambda x, y: x + planning_env.ComputeDistance(y[0], y[1]), zip(plan[0:-1], plan[1:]), 0)
-    print "total plan time = "
-    print total_time
-    print "path length = "
-    print path_length
-    print "nodes number = "
-    print nodes_num
-    print " "
+    sums = numpy.array([0.]*3)
+    for i in range(0,10):
+	    start_time = time.time()
+	    plan,nodes_num = planner.Plan(start_config, goal_config)
+	    total_time = time.time() - start_time;
+	    path_length = reduce(lambda x, y: x + planning_env.ComputeDistance(y[0], y[1]), zip(plan[0:-1], plan[1:]), 0)
+	    print "total plan time = "
+	    print total_time
+	    print "path length = "
+	    print path_length
+	    print "nodes number = "
+	    print nodes_num
+	    print " "
+	    sums+=numpy.array([total_time, path_length, nodes_num])
+    sums/=10
+    print sums
     traj = robot.ConvertPlanToTrajectory(plan)
 
     raw_input('Press any key to execute trajectory')
