@@ -35,7 +35,7 @@ class AStarPlanner(object):
         # Add the start id th the open node
         self.nodes[start_id] = 0
         h_cost = self.planning_env.ComputeHeuristicCost(start_id, goal_id)
-        f_cost = self.nodes[start_id] + 2*h_cost #the f(n) or f(x) of the first node which is the start config
+        f_cost = self.nodes[start_id] + 5*h_cost #the f(n) or f(x) of the first node which is the start config
         #openSet[start_id]=f_cost
         # openSet.put((f_cost,h_cost,start_id))
         heapq.heappush(openSet,(f_cost,h_cost,start_id))
@@ -81,7 +81,7 @@ class AStarPlanner(object):
 
                 self.nodes[y_id]=tentative_g_cost_y
                 h = self.planning_env.ComputeHeuristicCost(y_id, goal_id)
-                f = self.nodes[y_id] + 2*h
+                f = self.nodes[y_id] + 5*h
                 # print "y_id = " , y_id ,"f =",f, ", g =" , self.nodes[y_id], ", h =", f-self.nodes[y_id]
 
                 # openSet.put((f,h,y_id))
